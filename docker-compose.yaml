@@ -52,10 +52,6 @@ x-airflow-common:
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    # For backward compatibility, with Airflow <2.3
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
@@ -87,13 +83,14 @@ x-airflow-common:
     #   condition: service_started
     # dind:
     #   condition: service_started
+  env_file:
+    - .env.idoml
 
 services:
   postgres:
     image: postgres:13
     environment:
       POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
     # volumes:
     #   - postgres-db-volume:/var/lib/postgresql/data
@@ -102,8 +99,8 @@ services:
       interval: 5s
       retries: 5
     restart: always
-    secrets:
-      - postgres-password
+    env_file:
+      - .env.idoml 
 
   redis:
     image: redis:latest
@@ -275,8 +272,6 @@ services:
       <<: *airflow-common-env
       _AIRFLOW_DB_UPGRADE: 'true'
       _AIRFLOW_WWW_USER_CREATE: 'true'
-      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
-      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
       _PIP_ADDITIONAL_REQUIREMENTS: ''
     user: "0:0"
     volumes:
@@ -323,11 +318,8 @@ services:
       - "9099:9099"
     expose:
       - 9099
-    environment:
-      MINIO_ROOT_USER: idoml-minio
-      MINIO_ROOT_PASSWORD_FILE: /run/secrets/minio-password
-    secrets:
-      - minio-password
+    env_file:
+      - .env.idoml
     volumes:
       - storage-minio:/minio-data
     command: server --address ":9099" --console-address ":9000" /minio-data
@@ -337,9 +329,3 @@ volumes:
   postgres-db-volume:
   storage-minio:
   git-sync-dags:
-
-secrets:
-  minio-password:
-    file: ./secrets/minio-password.txt
-  postgres-password:
-    file: ./secrets/postgres-password.txt
