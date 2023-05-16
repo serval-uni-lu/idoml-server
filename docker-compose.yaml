@@ -63,8 +63,7 @@ x-airflow-common:
     AIRFLOW_VAR_DOCKER_HOST: '{"protocol":"tcp","host":"dind","port":"2375"}'
     DOCKER_HOST: tcp://dind:2375
   volumes:
-    # - git-sync-dags:/opt/airflow/dags
-    - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
+    - git-sync-dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     # - /var/run/docker.sock:/var/run/docker.sock
@@ -79,8 +78,8 @@ x-airflow-common:
       condition: service_healthy
     postgres:
       condition: service_healthy
-    # git-sync:
-    #   condition: service_started
+    git-sync:
+      condition: service_started
     # dind:
     #   condition: service_started
   env_file:
@@ -113,18 +112,18 @@ services:
       retries: 50
     restart: always
 
-#   git-sync:
-#     image: registry.k8s.io/git-sync/git-sync:v3.6.3
-#     user: root
-#     environment:
-#       GIT_SYNC_REPO: "https://github.com/yulinhuang/temp-dag.git"
-#       GIT_SYNC_DEST: "git-sync-dags"
-#       GIT_SYNC_BRANCH: "main"
-#       GIT_SYNC_ROOT: "/opt/airflow/dags"
-#       GIT_SYNC_PERIOD: "10"
-#     restart: always
-#     volumes:
-#       - git-sync-dags:/opt/airflow/dags
+  git-sync:
+    image: registry.k8s.io/git-sync/git-sync:v3.6.3
+    user: root
+    environment:
+      GIT_SYNC_REPO: "https://github.com/yulinhuang/temp-dag.git"
+      GIT_SYNC_DEST: "git-sync-dags"
+      GIT_SYNC_BRANCH: "main"
+      GIT_SYNC_ROOT: "/opt/airflow/dags"
+      GIT_SYNC_PERIOD: "10"
+    restart: always
+    volumes:
+      - git-sync-dags:/opt/airflow/dags
 
   dind:
     image: docker:dind
