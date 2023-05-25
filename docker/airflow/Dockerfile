@@ -8,7 +8,9 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* 
   
-RUN groupadd --gid 998 docker \
+ARG DOCKER_GROUP_ID
+
+RUN groupadd --gid ${DOCKER_GROUP_ID} docker \
   && newgrp docker 
 
 USER airflow
