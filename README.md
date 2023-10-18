@@ -5,12 +5,16 @@
 ### Requirements
 
 #### Create ssh keys
+
 1. Create ssh keys
-    - `ssh-keygen -t ed25519 -f secrets/ssh/idoml_deploy_key"
+
+    ```ssh-keygen -t ed25519 -f secrets/ssh/idoml_deploy_key```
 2. Add ssh keys to github deploy key 
-    - `cat secrets/ssh/idoml_deploy_key.pub`
+
+    ```cat secrets/ssh/idoml_deploy_key.pub```
 3. Add github to known hosts
-    - ssh-keyscan -t ed25519 github.com >> secrets/ssh/known_hosts
+
+    ```ssh-keyscan -t ed25519 github.com >> secrets/ssh/known_hosts```
 4. Create environment file
     - .env: airflow uid (Be sure it is in root group) and docker uid
     - .env.idoml: idoml settings
