@@ -54,3 +54,30 @@ _AIRFLOW_WWW_USER_USERNAME=
 _AIRFLOW_WWW_USER_PASSWORD=
 ```
 
+## Configuration
+
+### MINIO
+
+#### Create minio bucket for airflow logs
+    
+    ```docker-compose exec minio sh -c "mc mb minio/airflow-logs"```
+    
+#### Generate credentials for airflow
+    
+    ```docker-compose exec minio sh -c "mc admin user add minio airflow ${MINIO_ROOT_PASSWORD} readwrite"```
+
+### Airflow
+Once deployed, you can access the airflow webserver and login with the credentials you defined in the .env.idoml file.  
+
+#### Airflow logs
+Airflow logs are stored in the minio bucket defined in the .env.idoml file. Add a connection to the airflow webserver with the following settings:
+- Conn Id: idoml_minio_conn
+- Conn Type: Amazon Web Services
+- AWS Access Key ID: create from MINIO
+- AWS Secret Access Key: create from MINIO
+- extra: 
+    ```
+        {
+        "endpoint_url": "MINIO endpoint url",
+        }
+    ```
