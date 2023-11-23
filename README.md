@@ -4,7 +4,10 @@
 
 ### Requirements
 
-#### Create ssh keys
+#### Aiflow dag tracking repository
+We use a git repository to track our dags. This repository is mounted in the airflow container. Please create an enpty git repository 
+
+#### Create ssh deploy keys
 
 1. Create ssh keys
 
@@ -15,9 +18,26 @@
 3. Add github to known hosts
 
     ```ssh-keyscan -t ed25519 github.com >> secrets/ssh/known_hosts```
-4. Create environment file
+
+#### Set up synchronization with git repository
+1. Add generated public key to git repository deploy keys
+
+2. Add git repository url and branch to the docker-compose file (git-sync service). Please use the ssh url of the git repository.
+
+    ```
+    git-sync:
+        image: registry.k8s.io/git-sync/git-sync:v3.6.3
+        user: root
+        environment:
+        GIT_SYNC_REPO: "git@github.com:{account}/{repo}.git"
+        GIT_SYNC_BRANCH: "dev"
+    ```
+
+### Create environment file
     - .env: airflow uid (Be sure it is in root group) and docker uid
     - .env.idoml: idoml settings
+
+
 
 #### Define the following environment variables to .env
 
@@ -28,7 +48,7 @@ echo -e "DOCKER_GROUP_ID=$(getent group docker | cut -d ':' -f 3)" >> .env
 
 #### Define the following environment variables to .env.idoml
 
-Create a .env.idoml file and add the following content and fill the missing values
+Open the .env.idoml file and add the following content and fill the missing values
 
 ```
 # MINIO Settings
@@ -54,7 +74,13 @@ _AIRFLOW_WWW_USER_USERNAME=
 _AIRFLOW_WWW_USER_PASSWORD=
 ```
 
-## Configuration
+## Start the server
+
+Execute the following command to start the server
+
+    ```docker-compose up -d```
+
+## Configuration after deployment
 
 ### MINIO
 
