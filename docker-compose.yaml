@@ -40,7 +40,7 @@
 #
 # Feel free to modify this file to suit your needs.
 ---
-version: '3'
+version: '3.8'
 x-airflow-common:
   &airflow-common
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
@@ -67,6 +67,7 @@ x-airflow-common:
     - git-sync-dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
+    - ./src/airflow/webserver_config.py:/opt/airflow/webserver_config.py
     - /var/run/docker.sock:/var/run/docker.sock
   user: "${AIRFLOW_UID:-50000}:0"
   group_add:
@@ -81,6 +82,27 @@ x-airflow-common:
     - .env.idoml
 
 services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.5
+    ports:
+      - "8180:8080"
+    env_file:
+      - .env.idoml
+    volumes:
+      - ./src/keycloak:/opt/keycloak/data/import
+      - keycloak_data:/opt/keycloak/
+    command:
+      - start-dev --import-realm
+    environment:
+      KC_HEALTH_ENABLED: true
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+
   postgres:
     image: postgres:13
     environment:
@@ -260,7 +282,6 @@ services:
     environment:
       <<: *airflow-common-env
       _AIRFLOW_DB_UPGRADE: 'true'
-      _AIRFLOW_WWW_USER_CREATE: 'true'
       _PIP_ADDITIONAL_REQUIREMENTS: ''
     user: "0:0"
     volumes:
@@ -309,8 +330,16 @@ services:
       - storage-minio:/minio-data
     command: server --address ":9099" --console-address ":9000" /minio-data
     restart: always # necessary since it's failing to start sometimes
+    environment:
+      MINIO_IDENTITY_OPENID_CLIENT_ID: minio
+      MINIO_IDENTITY_OPENID_SCOPES: minio
+      MINIO_IDENTITY_OPENID_REDIRECT_URI_DYNAMIC: "on"
+    depends_on:
+      keycloak:
+        condition: service_healthy
 
 volumes:
   postgres-db-volume:
   storage-minio:
   git-sync-dags:
+  keycloak_data:
