@@ -325,7 +325,6 @@ services:
       - "9000:9000"
       - "9099:9099"
     env_file:
-      - .env
       - .env.idoml
     volumes:
       - storage-minio:/minio-data
