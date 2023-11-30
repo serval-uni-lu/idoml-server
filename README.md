@@ -51,27 +51,21 @@ echo -e "DOCKER_GROUP_ID=$(getent group docker | cut -d ':' -f 3)" >> .env
 Open the .env.idoml file and add the following content and fill the missing values
 
 ```
-# MINIO Settings
-MINIO_ROOT_USER=
-MINIO_ROOT_PASSWORD=
+IDOML_DOMAIN={the domain of the server, e.g. idoml.idoml.org}
 
 # POSTGRES Settings
-POSTGRES_PASSWORD=
+POSTGRES_PASSWORD={the password for airflow postgres user}
 
-# Airflow Settings
-AIRFLOW__DATABASE__SQL_ALCHEMY_CONN='postgresql+psycopg2://airflow:${POSTGRES_PASSWORD}@postgres/airflow'
-AIRFLOW__CORE__SQL_ALCHEMY_CONN='postgresql+psycopg2://airflow:${POSTGRES_PASSWORD}@postgres/airflow'
-AIRFLOW__CELERY__RESULT_BACKEND='db+postgresql://airflow:${POSTGRES_PASSWORD}@postgres/airflow'
-AIRFLOW__CORE__FERNET_KEY=''
-AIRFLOW__LOGGING__REMOTE_LOGGING='true'
-AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER='s3://airflow-logs'
-AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID='idoml_minio_conn'
-AIRFLOW__LOGGING__ENCRYPT_S3_LOGS='false'
+# KEYCLOAK Settings
+KEYCLOAK_ADMIN={the username for keycloak admin user}
+KEYCLOAK_ADMIN_PASSWORD={the password for keycloak admin user}
+KEYCLOAK_CLIENT_SECRET_AIRFLOW={the client secret for airflow client in keycloak}
+KEYCLOAK_CLIENT_SECRET_MINIO={the client secret for minio client in keycloak}
+KEYCLOAK_CLIENT_SECRET_JUPYTERHUB={the client secret for jupyterhub client in keycloak}
 
-
-# Airflow Admin User
-_AIRFLOW_WWW_USER_USERNAME=
-_AIRFLOW_WWW_USER_PASSWORD=
+# MINIO Settings
+MINIO_ROOT_USER={the username for minio root user}
+MINIO_ROOT_PASSWORD={the password for minio root user}
 ```
 
 ## Start the server
