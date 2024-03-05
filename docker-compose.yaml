@@ -136,16 +136,6 @@ services:
       - .env.idoml 
     networks:
       - traefiknet
-    # labels:
-    #   - "traefik.enable=true"
-    #   - "traefik.tcp.routers.idoml-postgres.entrypoints=postgres"
-    #   # Using HostSNI(`*`) for non tls connection. TODO
-    #   - "traefik.tcp.routers.idoml-postgres.rule= HostSNI(`postgres.idoml.precision.uni.lux`)"
-    #   - "traefik.tcp.routers.idoml-postgres.tls.passthrough=true"
-    #   - "traefik.tcp.routers.idoml-postgres.tls=true"
-    #   - "traefik.tcp.routers.idoml-postgres.tls.certresolver=myresolver"
-    #   - "traefik.tcp.routers.idoml-postgres.service=service_idoml-postgres"
-    #   - "traefik.tcp.services.service_idoml-postgres.loadbalancer.server.port=5432"
 
   redis:
     image: redis:latest
@@ -159,13 +149,6 @@ services:
     restart: always
     networks:
       - traefiknet
-    # labels:
-    #   - "traefik.enable=true"
-    #   - "traefik.tcp.routers.idoml-redis.entrypoints=redis"
-    #   # Using HostSNI(`*`) for non tls connection. TODO
-    #   - "traefik.tcp.routers.idoml-redis.rule=HostSNI(`redis.idoml.precision.uni.lux`)"
-    #   - "traefik.tcp.routers.idoml-redis.tls.passthrough=true"
-    #   - "traefik.tcp.services.idoml-redis.loadbalancer.server.port=6379"
 
   git-sync:
     image: registry.k8s.io/git-sync/git-sync:v3.6.3
