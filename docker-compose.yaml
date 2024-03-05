@@ -70,6 +70,8 @@ x-airflow-common:
     - ./src/airflow/webserver_config.py:/opt/airflow/webserver_config.py
     - /var/run/docker.sock:/var/run/docker.sock
   user: "${AIRFLOW_UID:-50000}:0"
+  networks:
+    - traefiknet
   group_add:
     - docker
   depends_on:
@@ -78,8 +80,15 @@ x-airflow-common:
       condition: service_healthy
     postgres:
       condition: service_healthy
+    keycloak:
+      condition: service_healthy
   env_file:
     - .env.idoml
+
+networks:
+  traefiknet:
+    external: true
+    name: traefiknet
 
 services:
   keycloak:
@@ -102,6 +111,12 @@ services:
       retries: 5
       start_period: 30s
     restart: always
+    networks:
+      - traefiknet
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.idoml-keycloak.entrypoints=web"
+      - "traefik.http.routers.idoml-keycloak.rule=Host(`keycloak.idoml.precision.uni.lux`)"
 
   postgres:
     image: postgres:13
@@ -119,6 +134,18 @@ services:
       - 5432:5432
     env_file:
       - .env.idoml 
+    networks:
+      - traefiknet
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.tcp.routers.idoml-postgres.entrypoints=postgres"
+    #   # Using HostSNI(`*`) for non tls connection. TODO
+    #   - "traefik.tcp.routers.idoml-postgres.rule= HostSNI(`postgres.idoml.precision.uni.lux`)"
+    #   - "traefik.tcp.routers.idoml-postgres.tls.passthrough=true"
+    #   - "traefik.tcp.routers.idoml-postgres.tls=true"
+    #   - "traefik.tcp.routers.idoml-postgres.tls.certresolver=myresolver"
+    #   - "traefik.tcp.routers.idoml-postgres.service=service_idoml-postgres"
+    #   - "traefik.tcp.services.service_idoml-postgres.loadbalancer.server.port=5432"
 
   redis:
     image: redis:latest
@@ -130,6 +157,15 @@ services:
       timeout: 30s
       retries: 50
     restart: always
+    networks:
+      - traefiknet
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.tcp.routers.idoml-redis.entrypoints=redis"
+    #   # Using HostSNI(`*`) for non tls connection. TODO
+    #   - "traefik.tcp.routers.idoml-redis.rule=HostSNI(`redis.idoml.precision.uni.lux`)"
+    #   - "traefik.tcp.routers.idoml-redis.tls.passthrough=true"
+    #   - "traefik.tcp.services.idoml-redis.loadbalancer.server.port=6379"
 
   git-sync:
     image: registry.k8s.io/git-sync/git-sync:v3.6.3
@@ -137,7 +173,7 @@ services:
     environment:
       GIT_SYNC_REPO: "git@github.com:serval-uni-lu/idoml-dags.git"
       GIT_SYNC_DEST: "git-sync-dags"
-      GIT_SYNC_BRANCH: "dev"
+      GIT_SYNC_BRANCH: "idoml-vm"
       GIT_SYNC_ROOT: "/opt/airflow/dags"
       GIT_SYNC_PERIOD: "10"
       GIT_SYNC_SSH: true
@@ -151,7 +187,7 @@ services:
     <<: *airflow-common
     command: webserver
     ports:
-      - 8080:8080
+      - 8280:8080
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 10s
@@ -162,6 +198,10 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.idoml-airflow-web.entrypoints=web"
+      - "traefik.http.routers.idoml-airflow-web.rule=Host(`airflow.idoml.precision.uni.lux`)"
 
   airflow-scheduler:
     <<: *airflow-common
@@ -318,25 +358,72 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+      - traefiknet
+    labels:
+      - "traefik.enable=true"
+      # Console
+      - "traefik.http.routers.router_flower.rule=Host(`flower.idoml.precision.uni.lux`)"
+      - "traefik.http.routers.router_flower.entrypoints=web"
+      - "traefik.http.routers.router_flower.service=service_flower"
+      - "traefik.http.services.service_flower.loadbalancer.server.port=5555"
 
-  s3:
-    image: minio/minio:latest
+  minio:
+    image: minio/minio:RELEASE.2024-02-17T01-15-57Z
     ports:
       - "9000:9000"
-      - "9099:9099"
+      - "9001:9001"
     env_file:
       - .env.idoml
     volumes:
       - storage-minio:/minio-data
-    command: server --address ":9099" --console-address ":9000" /minio-data
+    command: server --console-address ":9001" /minio-data
     restart: always # necessary since it's failing to start sometimes
     environment:
       MINIO_IDENTITY_OPENID_CLIENT_ID: minio
       MINIO_IDENTITY_OPENID_SCOPES: minio
       MINIO_IDENTITY_OPENID_REDIRECT_URI_DYNAMIC: "on"
+      MINIO_DOMAIN: minio.idoml.precision.uni.lux
+      # MINIO_SERVER_URL: http://minio.idoml.precision.uni.lux
+      MINIO_BROWSER_REDIRECT_URL: http://console.minio.idoml.precision.uni.lux
     depends_on:
       keycloak:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - traefiknet
+    labels:
+      - "traefik.enable=true"
+      # Console
+      - "traefik.http.routers.minio-console.rule=Host(`console.minio.idoml.precision.uni.lux`)"
+      - "traefik.http.routers.minio-console.entrypoints=web"
+      - "traefik.http.routers.minio-console.service=minio-console"
+      - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
+      # APi
+      - "traefik.http.routers.minio.rule=Host(`minio.idoml.precision.uni.lux`)"
+      - "traefik.http.routers.minio.entrypoints=web"
+      - "traefik.http.routers.minio.service=minio"
+      - "traefik.http.services.minio.loadbalancer.server.port=9000"
+
+  mc:
+    image: quay.io/minio/mc:RELEASE.2024-02-24T01-33-20Z
+    env_file:
+      - .env.idoml
+    networks:
+      - traefiknet
+    depends_on:
+      minio: 
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set idoml-minio http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD} &&
+      /usr/bin/mc mb idoml-minio/airflow-logs;
+      exit 0;
+      "
 
 volumes:
   postgres-db-volume:
