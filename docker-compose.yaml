@@ -116,7 +116,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.idoml-keycloak.entrypoints=web"
-      - "traefik.http.routers.idoml-keycloak.rule=Host(`keycloak.idoml.precision.uni.lux`)"
+      - "traefik.http.routers.idoml-keycloak.rule=Host(`keycloak.${IDOML_DOMAIN}`)"
 
   postgres:
     image: postgres:13
@@ -184,7 +184,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.idoml-airflow-web.entrypoints=web"
-      - "traefik.http.routers.idoml-airflow-web.rule=Host(`airflow.idoml.precision.uni.lux`)"
+      - "traefik.http.routers.idoml-airflow-web.rule=Host(`airflow.${IDOML_DOMAIN}`)"
 
   airflow-scheduler:
     <<: *airflow-common
@@ -346,7 +346,7 @@ services:
     labels:
       - "traefik.enable=true"
       # Console
-      - "traefik.http.routers.router_flower.rule=Host(`flower.idoml.precision.uni.lux`)"
+      - "traefik.http.routers.router_flower.rule=Host(`flower.${IDOML_DOMAIN}`)"
       - "traefik.http.routers.router_flower.entrypoints=web"
       - "traefik.http.routers.router_flower.service=service_flower"
       - "traefik.http.services.service_flower.loadbalancer.server.port=5555"
@@ -366,9 +366,10 @@ services:
       MINIO_IDENTITY_OPENID_CLIENT_ID: minio
       MINIO_IDENTITY_OPENID_SCOPES: minio
       MINIO_IDENTITY_OPENID_REDIRECT_URI_DYNAMIC: "on"
-      MINIO_DOMAIN: minio.idoml.precision.uni.lux
-      # MINIO_SERVER_URL: http://minio.idoml.precision.uni.lux
-      MINIO_BROWSER_REDIRECT_URL: http://console.minio.idoml.precision.uni.lux
+      MINIO_DOMAIN: minio.${IDOML_DOMAIN}
+      # MINIO_SERVER_URL not working
+      # MINIO_SERVER_URL: http://minio.${IDOML_DOMAIN}
+      MINIO_BROWSER_REDIRECT_URL: http://console.minio.${IDOML_DOMAIN}
     depends_on:
       keycloak:
         condition: service_healthy
@@ -382,12 +383,12 @@ services:
     labels:
       - "traefik.enable=true"
       # Console
-      - "traefik.http.routers.minio-console.rule=Host(`console.minio.idoml.precision.uni.lux`)"
+      - "traefik.http.routers.minio-console.rule=Host(`console.minio.${IDOML_DOMAIN}`)"
       - "traefik.http.routers.minio-console.entrypoints=web"
       - "traefik.http.routers.minio-console.service=minio-console"
       - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
       # APi
-      - "traefik.http.routers.minio.rule=Host(`minio.idoml.precision.uni.lux`)"
+      - "traefik.http.routers.minio.rule=Host(`minio.${IDOML_DOMAIN}`)"
       - "traefik.http.routers.minio.entrypoints=web"
       - "traefik.http.routers.minio.service=minio"
       - "traefik.http.services.minio.loadbalancer.server.port=9000"
