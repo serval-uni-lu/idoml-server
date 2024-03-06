@@ -67,7 +67,7 @@ AUTH_ROLES_MAPPING = {
   "airflow_public": ["Public"],
 }
 IDOML_DOMAIN = os.environ.get('IDOML_DOMAIN', '')
-AIRFLOW_URL = f'http://{IDOML_DOMAIN}:8080'
+AIRFLOW_URL = f'http://airflow.{IDOML_DOMAIN}'
 PROVIDER_NAME = 'keycloak'
 CLIENT_ID = 'airflow'
 CLIENT_SECRET = os.environ.get('KEYCLOAK_CLIENT_SECRET_AIRFLOW', '')
