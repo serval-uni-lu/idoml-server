@@ -87,10 +87,21 @@ x-airflow-common:
 
 networks:
   traefiknet:
-    external: true
     name: traefiknet
 
 services:
+  traefik:
+    image: "traefik:v2.11"
+    restart: always
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks:
+      - traefiknet
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./src/traefik/config:/etc/traefik/:ro
+
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.5
     ports:
@@ -165,6 +176,8 @@ services:
     volumes:
       - git-sync-dags:/opt/airflow/dags
       - ./secrets/ssh/:/etc/git-secret 
+    labels:
+      - "traefik.enable=false"
 
   airflow-webserver:
     <<: *airflow-common
@@ -408,6 +421,8 @@ services:
       /usr/bin/mc mb idoml-minio/airflow-logs;
       exit 0;
       "
+    labels:
+      - "traefik.enable=false"
 
 volumes:
   postgres-db-volume:
