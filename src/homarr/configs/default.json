@@ -16,7 +16,7 @@
       "name": "Airflow",
       "url": "http://airflow.idoml.precision.uni.lux",
       "appearance": {
-        "iconUrl": "/imgs/logo/logo.png",
+        "iconUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/AirflowLogo.png",
         "appNameStatus": "normal",
         "positionAppName": "column",
         "lineClampAppName": 1,
@@ -38,19 +38,19 @@
         "externalUrl": "http://airflow.idoml.precision.uni.lux"
       },
       "area": {
-        "type": "wrapper",
+        "type": "sidebar",
         "properties": {
-          "id": "default"
+          "location": "left"
         }
       },
       "shape": {
         "lg": {
           "location": {
-            "x": 2,
+            "x": 0,
             "y": 0
           },
           "size": {
-            "width": 1,
+            "width": 2,
             "height": 1
           }
         },
@@ -69,9 +69,209 @@
         "type": null,
         "properties": []
       }
+    },
+    {
+      "id": "e7b36e87-a9b6-45cd-a835-d331328517d9",
+      "name": "Jupyterhub",
+      "url": "http://jupyterhub.idoml.precision.uni.lux",
+      "appearance": {
+        "iconUrl": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/jupyter.svg",
+        "appNameStatus": "normal",
+        "positionAppName": "column",
+        "lineClampAppName": 1,
+        "appNameFontSize": 16
+      },
+      "network": {
+        "enabledStatusChecker": true,
+        "statusCodes": [
+          "200",
+          "301",
+          "302",
+          "304",
+          "307",
+          "308"
+        ]
+      },
+      "behaviour": {
+        "isOpeningNewTab": true,
+        "externalUrl": "http://jupyterhub.idoml.precision.uni.lux"
+      },
+      "area": {
+        "type": "sidebar",
+        "properties": {
+          "location": "left"
+        }
+      },
+      "shape": {
+        "lg": {
+          "location": {
+            "x": 0,
+            "y": 2
+          },
+          "size": {
+            "width": 2,
+            "height": 1
+          }
+        }
+      },
+      "integration": {
+        "type": null,
+        "properties": []
+      }
+    },
+    {
+      "id": "a06e09c7-7e6d-49ef-a022-799f8e962fe9",
+      "name": "MLFlow",
+      "url": "http://idoml.mlflow.idoml.precision.uni.lux",
+      "appearance": {
+        "iconUrl": "https://mlflow.org/docs/latest/_static/MLflow-logo-final-black.png",
+        "appNameStatus": "normal",
+        "positionAppName": "column",
+        "lineClampAppName": 1,
+        "appNameFontSize": 16
+      },
+      "network": {
+        "enabledStatusChecker": true,
+        "statusCodes": [
+          "200",
+          "301",
+          "302",
+          "304",
+          "307",
+          "308"
+        ]
+      },
+      "behaviour": {
+        "isOpeningNewTab": true,
+        "externalUrl": "http://idoml.mlflow.idoml.precision.uni.lux"
+      },
+      "area": {
+        "type": "sidebar",
+        "properties": {
+          "location": "left"
+        }
+      },
+      "shape": {
+        "lg": {
+          "location": {
+            "x": 0,
+            "y": 3
+          },
+          "size": {
+            "width": 2,
+            "height": 1
+          }
+        }
+      },
+      "integration": {
+        "type": null,
+        "properties": []
+      }
+    },
+    {
+      "id": "e77c0c7a-6e2c-4dd1-bb9b-7207f6fff10a",
+      "name": "Minio",
+      "url": "http://minio.idoml.precision.uni.lux",
+      "appearance": {
+        "iconUrl": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/minio.svg",
+        "appNameStatus": "normal",
+        "positionAppName": "column",
+        "lineClampAppName": 1,
+        "appNameFontSize": 16
+      },
+      "network": {
+        "enabledStatusChecker": true,
+        "statusCodes": [
+          "200",
+          "301",
+          "302",
+          "304",
+          "307",
+          "308"
+        ]
+      },
+      "behaviour": {
+        "isOpeningNewTab": true,
+        "externalUrl": "http://minio.idoml.precision.uni.lux"
+      },
+      "area": {
+        "type": "sidebar",
+        "properties": {
+          "location": "left"
+        }
+      },
+      "shape": {
+        "lg": {
+          "location": {
+            "x": 0,
+            "y": 1
+          },
+          "size": {
+            "width": 2,
+            "height": 1
+          }
+        }
+      },
+      "integration": {
+        "type": null,
+        "properties": []
+      }
     }
   ],
   "widgets": [
+    {
+      "id": "f252768d-9e69-491b-b6b4-8cad04fa30e8",
+      "type": "date",
+      "properties": {
+        "display24HourFormat": true,
+        "dateFormat": "hide",
+        "enableTimezone": true,
+        "timezoneLocation": {
+          "name": "Tokyo",
+          "latitude": 35.6895,
+          "longitude": 139.69171
+        },
+        "titleState": "city"
+      },
+      "area": {
+        "type": "wrapper",
+        "properties": {
+          "id": "default"
+        }
+      },
+      "shape": {
+        "sm": {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "size": {
+            "width": 1,
+            "height": 1
+          }
+        },
+        "md": {
+          "location": {
+            "x": 3,
+            "y": 0
+          },
+          "size": {
+            "width": 1,
+            "height": 1
+          }
+        },
+        "lg": {
+          "location": {
+            "x": 8,
+            "y": 1
+          },
+          "size": {
+            "width": 2,
+            "height": 1
+          }
+        }
+      }
+    },
     {
       "id": "e3004052-6b83-480e-b458-56e8ccdca5f0",
       "type": "weather",
@@ -113,8 +313,8 @@
         },
         "lg": {
           "location": {
-            "x": 0,
-            "y": 0
+            "x": 8,
+            "y": 2
           },
           "size": {
             "width": 2,
@@ -177,59 +377,6 @@
       }
     },
     {
-      "id": "f252768d-9e69-491b-b6b4-8cad04fa30e8",
-      "type": "date",
-      "properties": {
-        "display24HourFormat": true,
-        "dateFormat": "hide",
-        "enableTimezone": true,
-        "timezoneLocation": {
-          "name": "Tokyo",
-          "latitude": 35.6895,
-          "longitude": 139.69171
-        },
-        "titleState": "city"
-      },
-      "area": {
-        "type": "wrapper",
-        "properties": {
-          "id": "default"
-        }
-      },
-      "shape": {
-        "sm": {
-          "location": {
-            "x": 0,
-            "y": 0
-          },
-          "size": {
-            "width": 1,
-            "height": 1
-          }
-        },
-        "md": {
-          "location": {
-            "x": 3,
-            "y": 0
-          },
-          "size": {
-            "width": 1,
-            "height": 1
-          }
-        },
-        "lg": {
-          "location": {
-            "x": 8,
-            "y": 1
-          },
-          "size": {
-            "width": 2,
-            "height": 1
-          }
-        }
-      }
-    },
-    {
       "id": "86b1921f-efa7-410f-92dd-79553bf3264d",
       "type": "notebook",
       "properties": {
@@ -266,10 +413,10 @@
         "lg": {
           "location": {
             "x": 0,
-            "y": 1
+            "y": 0
           },
           "size": {
-            "width": 6,
+            "width": 8,
             "height": 3
           }
         }
