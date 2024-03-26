@@ -12,65 +12,6 @@
   ],
   "apps": [
     {
-      "id": "79dfc960-1163-42a8-9413-7120180fea57",
-      "name": "Airflow",
-      "url": "http://airflow.idoml.precision.uni.lux",
-      "appearance": {
-        "iconUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/AirflowLogo.png",
-        "appNameStatus": "normal",
-        "positionAppName": "column",
-        "lineClampAppName": 1,
-        "appNameFontSize": 16
-      },
-      "network": {
-        "enabledStatusChecker": true,
-        "statusCodes": [
-          "200",
-          "301",
-          "302",
-          "304",
-          "307",
-          "308"
-        ]
-      },
-      "behaviour": {
-        "isOpeningNewTab": true,
-        "externalUrl": "http://airflow.idoml.precision.uni.lux"
-      },
-      "area": {
-        "type": "sidebar",
-        "properties": {
-          "location": "left"
-        }
-      },
-      "shape": {
-        "lg": {
-          "location": {
-            "x": 0,
-            "y": 0
-          },
-          "size": {
-            "width": 2,
-            "height": 1
-          }
-        },
-        "md": {
-          "location": {
-            "x": 0,
-            "y": 0
-          },
-          "size": {
-            "width": 1,
-            "height": 1
-          }
-        }
-      },
-      "integration": {
-        "type": null,
-        "properties": []
-      }
-    },
-    {
       "id": "e7b36e87-a9b6-45cd-a835-d331328517d9",
       "name": "Jupyterhub",
       "url": "http://jupyterhub.idoml.precision.uni.lux",
@@ -216,9 +157,121 @@
         "type": null,
         "properties": []
       }
+    },
+    {
+      "id": "79dfc960-1163-42a8-9413-7120180fea57",
+      "name": "Airflow",
+      "url": "http://airflow.idoml.precision.uni.lux",
+      "appearance": {
+        "iconUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/AirflowLogo.png",
+        "appNameStatus": "normal",
+        "positionAppName": "column",
+        "lineClampAppName": 1,
+        "appNameFontSize": 16
+      },
+      "network": {
+        "enabledStatusChecker": true,
+        "statusCodes": [
+          "200",
+          "301",
+          "302",
+          "304",
+          "307",
+          "308"
+        ]
+      },
+      "behaviour": {
+        "isOpeningNewTab": true,
+        "externalUrl": "http://airflow.idoml.precision.uni.lux"
+      },
+      "area": {
+        "type": "sidebar",
+        "properties": {
+          "location": "left"
+        }
+      },
+      "shape": {
+        "lg": {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "size": {
+            "width": 2,
+            "height": 1
+          }
+        },
+        "md": {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "size": {
+            "width": 1,
+            "height": 1
+          }
+        }
+      },
+      "integration": {
+        "type": null,
+        "properties": []
+      }
     }
   ],
   "widgets": [
+    {
+      "id": "971aa859-8570-49a1-8d34-dd5c7b3638d1",
+      "type": "date",
+      "properties": {
+        "display24HourFormat": true,
+        "dateFormat": "hide",
+        "enableTimezone": false,
+        "timezoneLocation": {
+          "name": "Paris",
+          "latitude": 48.85341,
+          "longitude": 2.3488
+        },
+        "titleState": "city"
+      },
+      "area": {
+        "type": "wrapper",
+        "properties": {
+          "id": "default"
+        }
+      },
+      "shape": {
+        "sm": {
+          "location": {
+            "x": 1,
+            "y": 0
+          },
+          "size": {
+            "width": 1,
+            "height": 1
+          }
+        },
+        "md": {
+          "location": {
+            "x": 4,
+            "y": 0
+          },
+          "size": {
+            "width": 1,
+            "height": 1
+          }
+        },
+        "lg": {
+          "location": {
+            "x": 8,
+            "y": 0
+          },
+          "size": {
+            "width": 2,
+            "height": 1
+          }
+        }
+      }
+    },
     {
       "id": "f252768d-9e69-491b-b6b4-8cad04fa30e8",
       "type": "date",
@@ -324,59 +377,6 @@
       }
     },
     {
-      "id": "971aa859-8570-49a1-8d34-dd5c7b3638d1",
-      "type": "date",
-      "properties": {
-        "display24HourFormat": true,
-        "dateFormat": "hide",
-        "enableTimezone": false,
-        "timezoneLocation": {
-          "name": "Paris",
-          "latitude": 48.85341,
-          "longitude": 2.3488
-        },
-        "titleState": "city"
-      },
-      "area": {
-        "type": "wrapper",
-        "properties": {
-          "id": "default"
-        }
-      },
-      "shape": {
-        "sm": {
-          "location": {
-            "x": 1,
-            "y": 0
-          },
-          "size": {
-            "width": 1,
-            "height": 1
-          }
-        },
-        "md": {
-          "location": {
-            "x": 4,
-            "y": 0
-          },
-          "size": {
-            "width": 1,
-            "height": 1
-          }
-        },
-        "lg": {
-          "location": {
-            "x": 8,
-            "y": 0
-          },
-          "size": {
-            "width": 2,
-            "height": 1
-          }
-        }
-      }
-    },
-    {
       "id": "86b1921f-efa7-410f-92dd-79553bf3264d",
       "type": "notebook",
       "properties": {
@@ -417,7 +417,7 @@
           },
           "size": {
             "width": 8,
-            "height": 3
+            "height": 4
           }
         }
       }
@@ -439,7 +439,7 @@
         "enabledSearchbar": true
       },
       "pageTitle": "IDOML Dashboard",
-      "logoImageUrl": "/imgs/logo/logo.png",
+      "logoImageUrl": "",
       "faviconUrl": "/imgs/favicon/favicon-squared.png",
       "backgroundImageUrl": "",
       "customCss": "",
@@ -457,7 +457,7 @@
       "backgroundImageAttachment": "fixed",
       "backgroundImageRepeat": "no-repeat",
       "backgroundImageSize": "cover",
-      "metaTitle": ""
+      "metaTitle": "IDOML Dashboard"
     },
     "access": {
       "allowGuests": false
