@@ -12,9 +12,107 @@
   ],
   "apps": [
     {
+      "id": "e77c0c7a-6e2c-4dd1-bb9b-7207f6fff10a",
+      "name": "Minio",
+      "url": "http://console.minio.${IDOML_DOMAIN}",
+      "appearance": {
+        "iconUrl": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/minio.svg",
+        "appNameStatus": "normal",
+        "positionAppName": "column",
+        "lineClampAppName": 1,
+        "appNameFontSize": 16
+      },
+      "network": {
+        "enabledStatusChecker": true,
+        "statusCodes": [
+          "200",
+          "301",
+          "302",
+          "304",
+          "307",
+          "308"
+        ]
+      },
+      "behaviour": {
+        "isOpeningNewTab": true,
+        "externalUrl": "http://console.minio.${IDOML_DOMAIN}"
+      },
+      "area": {
+        "type": "wrapper",
+        "properties": {
+          "id": "default"
+        }
+      },
+      "shape": {
+        "lg": {
+          "location": {
+            "x": 0,
+            "y": 1
+          },
+          "size": {
+            "width": 2,
+            "height": 1
+          }
+        }
+      },
+      "integration": {
+        "type": null,
+        "properties": []
+      }
+    },
+    {
+      "id": "91809aff-4b1a-4f5b-8557-56010ea94c33",
+      "name": "Logout SSO here",
+      "url": "http://keycloak.idoml.precision.uni.lux/realms/idoml/protocol/openid-connect/logout?client_id=homarr&post_logout_redirect_uri=http://dashboard.idoml.precision.uni.lux",
+      "appearance": {
+        "iconUrl": "https://unpkg.com/@tabler/icons-png@2.0.0-beta/icons/logout.png",
+        "appNameStatus": "normal",
+        "positionAppName": "column",
+        "lineClampAppName": 1,
+        "appNameFontSize": 16
+      },
+      "network": {
+        "enabledStatusChecker": false,
+        "statusCodes": [
+          "200",
+          "301",
+          "302",
+          "304",
+          "307",
+          "308"
+        ]
+      },
+      "behaviour": {
+        "isOpeningNewTab": false,
+        "externalUrl": "http://keycloak.idoml.precision.uni.lux/realms/idoml/protocol/openid-connect/logout?client_id=homarr&post_logout_redirect_uri=http://dashboard.idoml.precision.uni.lux"
+      },
+      "area": {
+        "type": "wrapper",
+        "properties": {
+          "id": "default"
+        }
+      },
+      "shape": {
+        "lg": {
+          "location": {
+            "x": 8,
+            "y": 2
+          },
+          "size": {
+            "width": 2,
+            "height": 1
+          }
+        }
+      },
+      "integration": {
+        "type": null,
+        "properties": []
+      }
+    },
+    {
       "id": "e7b36e87-a9b6-45cd-a835-d331328517d9",
       "name": "Jupyterhub",
-      "url": "http://jupyterhub.idoml.precision.uni.lux",
+      "url": "http://jupyterhub.${IDOML_DOMAIN}",
       "appearance": {
         "iconUrl": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/jupyter.svg",
         "appNameStatus": "normal",
@@ -35,12 +133,12 @@
       },
       "behaviour": {
         "isOpeningNewTab": true,
-        "externalUrl": "http://jupyterhub.idoml.precision.uni.lux"
+        "externalUrl": "http://jupyterhub.${IDOML_DOMAIN}"
       },
       "area": {
-        "type": "sidebar",
+        "type": "wrapper",
         "properties": {
-          "location": "left"
+          "id": "default"
         }
       },
       "shape": {
@@ -63,7 +161,7 @@
     {
       "id": "a06e09c7-7e6d-49ef-a022-799f8e962fe9",
       "name": "MLFlow",
-      "url": "http://idoml.mlflow.idoml.precision.uni.lux",
+      "url": "http://idoml.mlflow.${IDOML_DOMAIN}",
       "appearance": {
         "iconUrl": "https://mlflow.org/docs/latest/_static/MLflow-logo-final-black.png",
         "appNameStatus": "normal",
@@ -84,12 +182,12 @@
       },
       "behaviour": {
         "isOpeningNewTab": true,
-        "externalUrl": "http://idoml.mlflow.idoml.precision.uni.lux"
+        "externalUrl": "http://idoml.mlflow.${IDOML_DOMAIN}"
       },
       "area": {
-        "type": "sidebar",
+        "type": "wrapper",
         "properties": {
-          "location": "left"
+          "id": "default"
         }
       },
       "shape": {
@@ -110,58 +208,9 @@
       }
     },
     {
-      "id": "e77c0c7a-6e2c-4dd1-bb9b-7207f6fff10a",
-      "name": "Minio",
-      "url": "http://minio.idoml.precision.uni.lux",
-      "appearance": {
-        "iconUrl": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/minio.svg",
-        "appNameStatus": "normal",
-        "positionAppName": "column",
-        "lineClampAppName": 1,
-        "appNameFontSize": 16
-      },
-      "network": {
-        "enabledStatusChecker": true,
-        "statusCodes": [
-          "200",
-          "301",
-          "302",
-          "304",
-          "307",
-          "308"
-        ]
-      },
-      "behaviour": {
-        "isOpeningNewTab": true,
-        "externalUrl": "http://minio.idoml.precision.uni.lux"
-      },
-      "area": {
-        "type": "sidebar",
-        "properties": {
-          "location": "left"
-        }
-      },
-      "shape": {
-        "lg": {
-          "location": {
-            "x": 0,
-            "y": 1
-          },
-          "size": {
-            "width": 2,
-            "height": 1
-          }
-        }
-      },
-      "integration": {
-        "type": null,
-        "properties": []
-      }
-    },
-    {
       "id": "79dfc960-1163-42a8-9413-7120180fea57",
       "name": "Airflow",
-      "url": "http://airflow.idoml.precision.uni.lux",
+      "url": "http://airflow.${IDOML_DOMAIN}",
       "appearance": {
         "iconUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/AirflowLogo.png",
         "appNameStatus": "normal",
@@ -182,12 +231,12 @@
       },
       "behaviour": {
         "isOpeningNewTab": true,
-        "externalUrl": "http://airflow.idoml.precision.uni.lux"
+        "externalUrl": "http://airflow.${IDOML_DOMAIN}"
       },
       "area": {
-        "type": "sidebar",
+        "type": "wrapper",
         "properties": {
-          "location": "left"
+          "id": "default"
         }
       },
       "shape": {
@@ -219,59 +268,6 @@
     }
   ],
   "widgets": [
-    {
-      "id": "971aa859-8570-49a1-8d34-dd5c7b3638d1",
-      "type": "date",
-      "properties": {
-        "display24HourFormat": true,
-        "dateFormat": "hide",
-        "enableTimezone": false,
-        "timezoneLocation": {
-          "name": "Paris",
-          "latitude": 48.85341,
-          "longitude": 2.3488
-        },
-        "titleState": "city"
-      },
-      "area": {
-        "type": "wrapper",
-        "properties": {
-          "id": "default"
-        }
-      },
-      "shape": {
-        "sm": {
-          "location": {
-            "x": 1,
-            "y": 0
-          },
-          "size": {
-            "width": 1,
-            "height": 1
-          }
-        },
-        "md": {
-          "location": {
-            "x": 4,
-            "y": 0
-          },
-          "size": {
-            "width": 1,
-            "height": 1
-          }
-        },
-        "lg": {
-          "location": {
-            "x": 8,
-            "y": 0
-          },
-          "size": {
-            "width": 2,
-            "height": 1
-          }
-        }
-      }
-    },
     {
       "id": "f252768d-9e69-491b-b6b4-8cad04fa30e8",
       "type": "date",
@@ -316,7 +312,7 @@
         "lg": {
           "location": {
             "x": 8,
-            "y": 1
+            "y": 0
           },
           "size": {
             "width": 2,
@@ -367,7 +363,7 @@
         "lg": {
           "location": {
             "x": 8,
-            "y": 2
+            "y": 1
           },
           "size": {
             "width": 2,
@@ -381,7 +377,7 @@
       "type": "notebook",
       "properties": {
         "showToolbar": true,
-        "content": "<h2><strong>Welcome to IDOML 🚀👋</strong></h2><p>We're glad that you're here! Homarr is a <em>modern </em>and <em>easy to use</em> dashboard that helps you to <strong>organize and manage</strong> your home network from one place. Control is <strong>at your fingertips</strong>.</p><p>We recommend you to read the <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://homarr.dev/docs/getting-started/after-the-installation\">getting started guide</a> first. To edit this board you must enter the edit mode - only administrators can do this. Adding an app is the first step you should take. You can do this by clicking the <code>Add tile</code> button at the top right and select <code>App</code>. After you provided an internal URL, external URL and selected an icon you can drag it around when holding down the left mouse button. Make it bigger or smaller using the drag icon at the bottom right. When you're happy with it's position, you <strong>must exit edit mode to save your board</strong>. Adding widgets works the same way but may require additional configuration - read the documentation for more information.</p><p>To remove this widget, you must log in to your administrator account and click on the menu to delete it.</p><p><strong><u>Your TODO list:</u></strong></p><ul data-type=\"taskList\"><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Read the <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://homarr.dev\">documentation</a></p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Add your <em>first app</em></p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p><em>Resize </em>and <em>drag</em> your app to a different position</p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Add the <em>clock widget</em> to your dashboard</p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Create a <em>new user</em></p></div></li></ul>"
+        "content": "<h2><strong>Welcome to IDOML 🚀👋</strong></h2><p>We're glad that you're here! IDOML is a <em>modern </em>and <em>easy to use</em> platform that helps you to <strong>build and deploy</strong> your ML project from scratch to versioned pipeline.</p><p>We recommend you to read the <a rel=\"noopener noreferrer nofollow\" href=\"http://test\">presentation</a> of different tools first, which will give you a basic understanding of the platform.</p><p></p><p><strong><u>Your getting started list:</u></strong></p><ul data-type=\"taskList\"><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Read the <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://homarr.dev\">tools presentation</a></p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Setting up your credentials</p><ul data-type=\"taskList\"><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Github tokens</p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Minio Access Keys</p></div></li></ul></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Configure IDOML runtime with Elyra</p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Building your pipeline with Elyra</p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Interaction with MLflow</p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>Submit your pipeline to airflow</p></div></li></ul><p></p><p></p><p>We recommend you to read the <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://homarr.dev/docs/getting-started/after-the-installation\">getting started guide</a> first. To edit this board you must enter the edit mode - only administrators can do this. Adding an app is the first step you should take. You can do this by clicking the <code>Add tile</code> button at the top right and select <code>App</code>. After you provided an internal URL, external URL and selected an icon you can drag it around when holding down the left mouse button. Make it bigger or smaller using the drag icon at the bottom right. When you're happy with it's position, you <strong>must exit edit mode to save your board</strong>. Adding widgets works the same way but may require additional configuration - read the documentation for more information.</p><p>To remove this widget, you must log in to your administrator account and click on the menu to delete it.</p><p></p>"
       },
       "area": {
         "type": "wrapper",
@@ -412,11 +408,11 @@
         },
         "lg": {
           "location": {
-            "x": 0,
+            "x": 2,
             "y": 0
           },
           "size": {
-            "width": 8,
+            "width": 6,
             "height": 4
           }
         }
@@ -432,17 +428,17 @@
     },
     "customization": {
       "layout": {
-        "enabledLeftSidebar": true,
+        "enabledLeftSidebar": false,
         "enabledRightSidebar": false,
         "enabledDocker": false,
         "enabledPing": true,
         "enabledSearchbar": true
       },
       "pageTitle": "IDOML Dashboard",
-      "logoImageUrl": "",
-      "faviconUrl": "/imgs/favicon/favicon-squared.png",
+      "logoImageUrl": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/minio.svg",
+      "faviconUrl": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/minio.svg",
       "backgroundImageUrl": "",
-      "customCss": "",
+      "customCss": ".mantine-Input-wrapper:has(.dashboard-header-search-input){\n  display: none;\n}",
       "colors": {
         "primary": "red",
         "secondary": "yellow",
@@ -460,7 +456,8 @@
       "metaTitle": "IDOML Dashboard"
     },
     "access": {
-      "allowGuests": false
+      "allowGuests": true
     }
-  }
+  },
+  "DOMAIN_NAME": "idoml.precision.uni.lux"
 }
