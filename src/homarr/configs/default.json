@@ -12,104 +12,6 @@
   ],
   "apps": [
     {
-      "id": "e77c0c7a-6e2c-4dd1-bb9b-7207f6fff10a",
-      "name": "Minio",
-      "url": "http://console.minio.${IDOML_DOMAIN}",
-      "appearance": {
-        "iconUrl": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/minio.svg",
-        "appNameStatus": "normal",
-        "positionAppName": "column",
-        "lineClampAppName": 1,
-        "appNameFontSize": 16
-      },
-      "network": {
-        "enabledStatusChecker": true,
-        "statusCodes": [
-          "200",
-          "301",
-          "302",
-          "304",
-          "307",
-          "308"
-        ]
-      },
-      "behaviour": {
-        "isOpeningNewTab": true,
-        "externalUrl": "http://console.minio.${IDOML_DOMAIN}"
-      },
-      "area": {
-        "type": "wrapper",
-        "properties": {
-          "id": "default"
-        }
-      },
-      "shape": {
-        "lg": {
-          "location": {
-            "x": 0,
-            "y": 1
-          },
-          "size": {
-            "width": 2,
-            "height": 1
-          }
-        }
-      },
-      "integration": {
-        "type": null,
-        "properties": []
-      }
-    },
-    {
-      "id": "91809aff-4b1a-4f5b-8557-56010ea94c33",
-      "name": "Logout SSO here",
-      "url": "http://keycloak.idoml.precision.uni.lux/realms/idoml/protocol/openid-connect/logout?client_id=homarr&post_logout_redirect_uri=http://dashboard.idoml.precision.uni.lux",
-      "appearance": {
-        "iconUrl": "https://unpkg.com/@tabler/icons-png@2.0.0-beta/icons/logout.png",
-        "appNameStatus": "normal",
-        "positionAppName": "column",
-        "lineClampAppName": 1,
-        "appNameFontSize": 16
-      },
-      "network": {
-        "enabledStatusChecker": false,
-        "statusCodes": [
-          "200",
-          "301",
-          "302",
-          "304",
-          "307",
-          "308"
-        ]
-      },
-      "behaviour": {
-        "isOpeningNewTab": false,
-        "externalUrl": "http://keycloak.idoml.precision.uni.lux/realms/idoml/protocol/openid-connect/logout?client_id=homarr&post_logout_redirect_uri=http://dashboard.idoml.precision.uni.lux"
-      },
-      "area": {
-        "type": "wrapper",
-        "properties": {
-          "id": "default"
-        }
-      },
-      "shape": {
-        "lg": {
-          "location": {
-            "x": 8,
-            "y": 2
-          },
-          "size": {
-            "width": 2,
-            "height": 1
-          }
-        }
-      },
-      "integration": {
-        "type": null,
-        "properties": []
-      }
-    },
-    {
       "id": "e7b36e87-a9b6-45cd-a835-d331328517d9",
       "name": "Jupyterhub",
       "url": "http://jupyterhub.${IDOML_DOMAIN}",
@@ -146,55 +48,6 @@
           "location": {
             "x": 0,
             "y": 2
-          },
-          "size": {
-            "width": 2,
-            "height": 1
-          }
-        }
-      },
-      "integration": {
-        "type": null,
-        "properties": []
-      }
-    },
-    {
-      "id": "a06e09c7-7e6d-49ef-a022-799f8e962fe9",
-      "name": "MLFlow",
-      "url": "http://idoml.mlflow.${IDOML_DOMAIN}",
-      "appearance": {
-        "iconUrl": "https://mlflow.org/docs/latest/_static/MLflow-logo-final-black.png",
-        "appNameStatus": "normal",
-        "positionAppName": "column",
-        "lineClampAppName": 1,
-        "appNameFontSize": 16
-      },
-      "network": {
-        "enabledStatusChecker": true,
-        "statusCodes": [
-          "200",
-          "301",
-          "302",
-          "304",
-          "307",
-          "308"
-        ]
-      },
-      "behaviour": {
-        "isOpeningNewTab": true,
-        "externalUrl": "http://idoml.mlflow.${IDOML_DOMAIN}"
-      },
-      "area": {
-        "type": "wrapper",
-        "properties": {
-          "id": "default"
-        }
-      },
-      "shape": {
-        "lg": {
-          "location": {
-            "x": 0,
-            "y": 3
           },
           "size": {
             "width": 2,
@@ -257,6 +110,104 @@
           },
           "size": {
             "width": 1,
+            "height": 1
+          }
+        }
+      },
+      "integration": {
+        "type": null,
+        "properties": []
+      }
+    },
+    {
+      "id": "e77c0c7a-6e2c-4dd1-bb9b-7207f6fff10a",
+      "name": "Minio",
+      "url": "http://console.minio.${IDOML_DOMAIN}",
+      "appearance": {
+        "iconUrl": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/minio.svg",
+        "appNameStatus": "normal",
+        "positionAppName": "column",
+        "lineClampAppName": 1,
+        "appNameFontSize": 16
+      },
+      "network": {
+        "enabledStatusChecker": true,
+        "statusCodes": [
+          "200",
+          "301",
+          "302",
+          "304",
+          "307",
+          "308"
+        ]
+      },
+      "behaviour": {
+        "isOpeningNewTab": true,
+        "externalUrl": "http://console.minio.${IDOML_DOMAIN}"
+      },
+      "area": {
+        "type": "wrapper",
+        "properties": {
+          "id": "default"
+        }
+      },
+      "shape": {
+        "lg": {
+          "location": {
+            "x": 0,
+            "y": 1
+          },
+          "size": {
+            "width": 2,
+            "height": 1
+          }
+        }
+      },
+      "integration": {
+        "type": null,
+        "properties": []
+      }
+    },
+    {
+      "id": "a06e09c7-7e6d-49ef-a022-799f8e962fe9",
+      "name": "MLFlow",
+      "url": "http://idoml.mlflow.${IDOML_DOMAIN}",
+      "appearance": {
+        "iconUrl": "https://mlflow.org/docs/latest/_static/MLflow-logo-final-black.png",
+        "appNameStatus": "normal",
+        "positionAppName": "column",
+        "lineClampAppName": 1,
+        "appNameFontSize": 16
+      },
+      "network": {
+        "enabledStatusChecker": true,
+        "statusCodes": [
+          "200",
+          "301",
+          "302",
+          "304",
+          "307",
+          "308"
+        ]
+      },
+      "behaviour": {
+        "isOpeningNewTab": true,
+        "externalUrl": "http://idoml.mlflow.${IDOML_DOMAIN}"
+      },
+      "area": {
+        "type": "wrapper",
+        "properties": {
+          "id": "default"
+        }
+      },
+      "shape": {
+        "lg": {
+          "location": {
+            "x": 0,
+            "y": 3
+          },
+          "size": {
+            "width": 2,
             "height": 1
           }
         }
