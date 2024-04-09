@@ -42,7 +42,7 @@ We use a git repository to track our dags. This repository is mounted in the air
 #### Define the following environment variables to .env
 
 ```
-echo -e "AIRFLOW_UID=$(id -u)" > .env
+echo -e "AIRFLOW_UID=$(id -u)" >> .env
 echo -e "DOCKER_GROUP_ID=$(getent group docker | cut -d ':' -f 3)" >> .env
 ```
 
@@ -101,3 +101,13 @@ Airflow logs are stored in the minio bucket defined in the .env.idoml file. Add 
         "endpoint_url": "MINIO endpoint url",
         }
     ```
+
+
+docker compose run --rm airflow-cli connections add 'idoml_minio_conn' --conn-type 'aws' --conn-login 'idoml-minio' --conn-password 'idoml-minio' --conn-extra '{"endpoint_url": "http://minio.idoml.precision.uni.lux"}'
+
+
+source .env
+source .env.idoml
+docker compose run --rm airflow-cli connections add 'idoml_minio_conn' --conn-type 'aws' --conn-login "${MINIO_ROOT_USER}" --conn-password "${MINIO_ROOT_PASSWORD}" --conn-extra "'{\"endpoint_url\": \"http://minio.${IDOML_DOMAIN}\"}'"
+
+docker compose run --rm airflow-cli connections add 'idoml_minio_conn' --conn-type 'aws' --conn-login "${MINIO_ROOT_USER}" --conn-password "${MINIO_ROOT_PASSWORD}" --conn-extra '{"endpoint_url": "http://minio.idoml.precision.uni.lux"}'
