@@ -193,13 +193,11 @@ services:
     image: registry.k8s.io/git-sync/git-sync:v3.6.3
     user: root
     environment:
-      GIT_SYNC_REPO: "git@github.com:serval-uni-lu/idoml-dags.git"
       GIT_SYNC_DEST: "git-sync-dags"
-      GIT_SYNC_BRANCH: "idoml-vm"
       GIT_SYNC_ROOT: "/opt/airflow/dags"
       GIT_SYNC_PERIOD: "10"
-      GIT_SYNC_SSH: true
-      GIT_SSH_KEY_FILE: "/etc/git-secret/idoml_deploy_key"
+      # GIT_SYNC_SSH: true
+      # GIT_SSH_KEY_FILE: "/etc/git-secret/idoml_deploy_key"
     restart: always
     volumes:
       - git-sync-dags:/opt/airflow/dags
