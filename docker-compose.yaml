@@ -447,13 +447,56 @@ services:
       /bin/sh -c "
       /usr/bin/mc alias set idoml-minio http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD} &&
       /usr/bin/mc mb idoml-minio/airflow-logs;
+      /usr/bin/mc mb idoml-minio/mlflow-idoml;
       exit 0;
       "
     labels:
       - "traefik.enable=false"
 
+  mlflow:
+    image: idoml/mlflow
+    command:
+      - "mlflow"
+      - "server"
+      - "--backend-store-uri=postgresql://${DB_USER:-mlflow}:${DB_PASSWORD:-mlflow}@${DB_SERVER:-mlflow-db}:${DB_PORT:-5432}/${DB_NAME:-mlflow}"
+      - "--default-artifact-root=s3://mlflow-idoml"
+      - "-h 0.0.0.0"
+    environment:
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+      # - BACKEND=postgresql://${DB_USER:-mlflow}:${DB_PASSWORD:-mlflow}@${DB_SERVER:-db}:${DB_PORT:-5432}/${DB_NAME:-mlflow}
+      - AWS_ACCESS_KEY_ID=${IDOML_MINIO_ROOT_USER}
+      - AWS_SECRET_ACCESS_KEY=${IDOML_MINIO_ROOT_PASSWORD}
+    ports:
+      - 5000
+    networks:
+      - traefiknet
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mlflow-idoml-endpoint.entrypoints=web"
+      - "traefik.http.routers.mlflow-idoml-endpoint.rule=Host(`idoml.mlflow.${IDOML_DOMAIN}`)"
+      - "traefik.http.routers.mlflow-idoml.entrypoints=web"
+    restart: always
+    depends_on:
+      - mc
+      - mlflow-db
+
+  mlflow-db:
+    restart: always
+    image: postgres:13
+    # container_name: idoml-mlflow-db-${USER_NAME}
+    expose:
+      - ${DB_PORT:-5432}
+    environment:
+      - POSTGRES_DB=${DB_NAME:-mlflow}
+      - POSTGRES_USER=${DB_USER:-mlflow}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-mlflow}
+    volumes:
+      - mlflow-db-volume:/var/lib/postgresql/data
+
 volumes:
   postgres-db-volume:
+  mlflow-db-volume:
   storage-minio:
   git-sync-dags:
   keycloak_data:
