@@ -1,3 +1,8 @@
+<!-- Badges -->
+<p align="center">
+<img src="https://img.shields.io/github/stars/serval-uni-lu/idoml-server?label=%E2%AD%90%20Stars&style=flat-square?branch=master&kill_cache=1">
+</p>
+
 # IDOML server configuration repository
 Welcome to IDOML server repo!
 
@@ -10,7 +15,11 @@ In this repository you will find the configuration files to deploy the IDOML ser
 
 
 ## Requirements
-1. A linux server with at least 16GB of RAM and 4 CPU cores.
+1. Hardware Requirements:
+
+    - A Linux server with a minimum of 8GB of RAM and 4 CPU cores is required to run the platform efficiently. This configuration ensures optimal performance and scalability for your machine learning tasks.
+
+    - Note that the above requirement is exclusive of resources needed for hosting a JupyterHub server and executing machine learning tasks. The resources for JupyterHub server hosting vary based on the number of users and the size of data they handle. Similarly, resources for machine learning tasks depend on task complexity and data size. Scaling up for ML tasks can be achieved by hosting additional servers to manage [airflow workers](https://github.com/serval-uni-lu/idoml-worker-node).
 
 2. To deploy the IDOML server, ensure your system meets the following requirements:
 
@@ -23,9 +32,6 @@ In this repository you will find the configuration files to deploy the IDOML ser
 
         We expect that the user dispose a custom domain name. Please redirect all the subdomains to the server's IP address.
         Then update the **.env** file with the variable IDOML_DOMAIN. This domain will be used to access the services deployed on the server.
-
-        > [!Note]
-        > If you do not have a custom domain name, you can use the default domain name which is a subdomain of localhost. It should be able accessed from the server itself.
 
     -   Credentials setup:
 
@@ -50,6 +56,9 @@ In this repository you will find the configuration files to deploy the IDOML ser
         ```
         echo -e "DOCKER_GROUP_ID=$(getent group docker | cut -d ':' -f 3)" >> .env
         ```
+
+> [!Note]
+> If you do not have a custom domain name, you can use the default domain name which is a subdomain of localhost. It should be able accessed from the server itself.
 
 4. Establish a Git repository to monitor the Airflow DAGs. Kindly initiate an empty Git repository.
 
@@ -92,7 +101,7 @@ In this repository you will find the configuration files to deploy the IDOML ser
         ```
 
 
-## Installation
+## Deployment
 
 Once the requirements are met, the IDOML server can be deployed using the magic command:
 
@@ -100,61 +109,32 @@ Once the requirements are met, the IDOML server can be deployed using the magic 
 docker-compose up -d
 ```
 
-## Post deployment configuration
-We will now configure the airflow connections to access the minio bucket for logs. 
 
-```
-source .env
-source .env.idoml
-JSON_FMT='{"endpoint_url":"%s"}\n'
-JSON_STRING=$(printf "$JSON_FMT" "http://minio.${IDOML_DOMAIN}")
-docker compose run --rm airflow-cli connections add 'idoml_minio_conn' --conn-type 'aws' --conn-login "${MINIO_ROOT_USER}" --conn-password "${MINIO_ROOT_PASSWORD}" --conn-extra "${JSON_STRING}"
-```
+# Setting Up the IDOML-related Server
+
+### Jupyterhub server
+After deploying the IDOML server, the subsequent step involves configuring the JupyterHub server. JupyterHub is a multi-user server that grants users access to Jupyter notebooks. This server comes pre-configured with extensions and libraries to streamline machine learning tasks and pipeline deployment into the Airflow server.
+
+To set up the JupyterHub server, refer to the instructions provided in the  [idoml jupyterhub repository](https://github.com/serval-uni-lu/idoml-jupyterhub).
 
 
+### Airflow worker node
 
+The Airflow worker node functions as a server dedicated to executing tasks outlined in the Airflow Directed Acyclic Graphs (DAGs). This node's primary responsibility involves executing machine learning tasks and deploying pipelines.
 
+In the IDOML server, there is already a default worker provided. However, it's recommended to scale up the number of workers based on the number of tasks to be executed. This ensures efficient task execution and improves overall system performance.
 
+To configure the Airflow worker node, please consult the instructions available in the [idoml worker node repository](https://github.com/serval-uni-lu/idoml-worker-node).
 
-
+<!-- 
 ## Configuration after deployment
 
 ### MINIO
 
-#### Create minio bucket for airflow logs
-    
-    ```docker-compose exec minio sh -c "mc mb minio/airflow-logs```
     
 #### Generate credentials for airflow
     
 ```
 docker-compose exec minio sh -c "mc admin user add minio airflow ${MINIO_ROOT_PASSWORD} readwrite
 ```
-
-### Airflow
-Once deployed, you can access the airflow webserver and login with the credentials you defined in the .env.idoml file.  
-
-#### Airflow logs
-Airflow logs are stored in the minio bucket defined in the .env.idoml file. Add a connection to the airflow webserver with the following settings:
-- Conn Id: idoml_minio_conn
-- Conn Type: Amazon Web Services
-- AWS Access Key ID: create from MINIO
-- AWS Secret Access Key: create from MINIO
-- extra: 
-    ```
-        {
-        "endpoint_url": "MINIO endpoint url",
-        }
-    ```
-
-
-docker compose run --rm airflow-cli connections add 'idoml_minio_conn' --conn-type 'aws' --conn-login 'idoml-minio' --conn-password 'idoml-minio' --conn-extra '{"endpoint_url": "http://minio.idoml.precision.uni.lux"}'
-
-
-source .env
-source .env.idoml
-JSON_FMT='{"endpoint_url":"%s"}\n'
-JSON_STRING=$(printf "$JSON_FMT" "http://minio.${IDOML_DOMAIN}")
-docker compose run --rm airflow-cli connections add 'idoml_minio_conn' --conn-type 'aws' --conn-login "${MINIO_ROOT_USER}" --conn-password "${MINIO_ROOT_PASSWORD}" --conn-extra "${JSON_STRING}"
-
-docker compose run --rm airflow-cli connections add 'idoml_minio_conn' --conn-type 'aws' --conn-login "${MINIO_ROOT_USER}" --conn-password "${MINIO_ROOT_PASSWORD}" --conn-extra '{"endpoint_url": "http://minio.idoml.precision.uni.lux"}'
+ -->
