@@ -109,8 +109,15 @@ Once the requirements are met, the IDOML server can be deployed using the magic 
 docker-compose up -d
 ```
 
+## Adding an idoml platform user to Keycloak
 
-# Setting Up the IDOML-related Server
+Execute the following command:
+```
+bash scripts/add_user.sh
+```
+then follow the instructions (give first name / last name / emails). This will automatically create a user in Keycloak and assign the necessary roles to access the IDOML platform. User's login will be created using the first letter of their name, and last name. And the password will be the same as the login.
+
+## IDOML-related Server
 
 ### Jupyterhub server
 After deploying the IDOML server, the subsequent step involves configuring the JupyterHub server. JupyterHub is a multi-user server that grants users access to Jupyter notebooks. This server comes pre-configured with extensions and libraries to streamline machine learning tasks and pipeline deployment into the Airflow server.
