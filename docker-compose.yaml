@@ -454,7 +454,8 @@ services:
       - "traefik.enable=false"
 
   mlflow:
-    image: idoml/mlflow
+    build: 
+      dockerfile: docker/mlflow/Dockerfile
     command:
       - "mlflow"
       - "server"
