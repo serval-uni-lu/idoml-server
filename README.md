@@ -109,6 +109,14 @@ Once the requirements are met, the IDOML server can be deployed using the magic 
 docker-compose up -d
 ```
 
+## Try it out
+The platform is now accessible via the domain name you have set up. The IDOML dashboard can be accessed at the following URL:
+
+    http://dashboard.{IDOML_DOMAIN}
+
+Where {IDOML_DOMAIN} is the domain name you have set up previously in the **.env** file.
+
+
 ## Adding an idoml platform user to Keycloak
 
 Execute the following command:
@@ -117,6 +125,9 @@ bash scripts/add_user.sh
 ```
 then follow the instructions (give first name / last name / emails). This will automatically create a user in Keycloak and assign the necessary roles to access the IDOML platform. User's login will be created using the first letter of their name, and last name. And the password will be the same as the login.
 
+
+
+--------------------------------------------
 ## IDOML-related Server
 
 ### Jupyterhub server
