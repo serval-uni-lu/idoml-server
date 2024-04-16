@@ -116,6 +116,10 @@ The platform is now accessible via the domain name you have set up. The IDOML da
 
 Where {IDOML_DOMAIN} is the domain name you have set up previously in the **.env** file.
 
+> [!IMPORTANT]  
+> This platform is currently undergoing active development. When accessing the dashboard for the first time, you will be prompted to create an admin user. Please proceed with creating the admin user as instructed. 
+> The created user will not be used, the platform will authenticate users through Keycloak.
+
 
 ## Adding an idoml platform user to Keycloak
 

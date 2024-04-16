@@ -11,7 +11,7 @@ while getopts 'fle:v' flag; do
 done
 
 echo "Please specify User First name: "
-read FISRTNAME
+read FIRSTNAME
 
 echo "Please specify User Last name: "
 read LASTNAME
@@ -33,10 +33,11 @@ MINIO_ACCESS_KEY=$IDOML_MINIO_ROOT_USER
 MINIO_SECRET_KEY=$IDOML_MINIO_ROOT_PASSWORD
 
 # # User details
-USERNAME=${FISRTNAME:0:1}${LASTNAME}
+USERNAME=${FIRSTNAME:0:1}${LASTNAME}
 PASSWORD=$USERNAME
-ADMIN_GROUPS='["admin","airflow_admin","jupyterhub_admin","minio_admin"]'
-USER_GROUPS='["airflow_user","jupyterhub_admin","minio_admin"]'
+
+# ADMIN_GROUPS=["admin","airflow_admin","jupyterhub_admin","minio_admin"]
+# USER_GROUPS='["airflow_user","jupyterhub_admin","minio_admin"]'
 
 # Step 1: Authenticate with Keycloak and get admin token
 echo "Step 1: Authenticating with Keycloak..."
@@ -51,11 +52,21 @@ TOKEN_RESPONSE=$(curl -X POST "$KEYCLOAK_URL/realms/master/protocol/openid-conne
 ADMIN_TOKEN=$(echo "$TOKEN_RESPONSE" | grep -o '"access_token":"[^"]*' | sed 's/"access_token":"//')
 
 # Step 2: Create a new user in Keycloak realm
-echo "Step 2: Creating a new user ($USERNAME) in Keycloak..."
+echo "Step 2: Creating a new user ($USERNAME) in Keycloak... $LASTNAME $FIRSTNAME"
 CREATE_USER_RESPONSE=$(curl -X POST "$KEYCLOAK_URL/admin/realms/$REALM/users" \
     -H "Authorization: Bearer $ADMIN_TOKEN" \
     -H "Content-Type: application/json" \
-    -d '{"username":"'"$USERNAME"'","enabled":true,"email":"'"$EMAIL"'","lastName":'"$LASTNAME"',"firstName":'"$FIRSTNAME"',"groups":'"$ADMIN_GROUPS"',"attributes":{"AWS_ACCESS_KEY_ID":"default","AWS_SECRET_ACCESS_KEY":"default"},"credentials":[{"type":"password","value":"'"$PASSWORD"'","temporary":false}]}')
+    -d '{
+        "username":"'"$USERNAME"'",
+        "enabled":true,
+        "email":"'"$EMAIL"'",
+        "lastName":"'"$LASTNAME"'",
+        "firstName":"'"$FIRSTNAME"'",
+        "groups":["admin","airflow_admin","jupyterhub_admin","minio_admin"],
+        "attributes":{"AWS_ACCESS_KEY_ID":"default","AWS_SECRET_ACCESS_KEY":"default"},
+        "credentials":[{"type":"password","value":"'"$PASSWORD"'","temporary":false}]
+    }'
+)
 
 echo CREATE_USER_RESPONSE $CREATE_USER_RESPONSE
 
