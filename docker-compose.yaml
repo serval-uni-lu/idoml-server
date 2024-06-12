@@ -448,6 +448,7 @@ services:
       /usr/bin/mc alias set idoml-minio http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD} &&
       /usr/bin/mc mb idoml-minio/airflow-logs;
       /usr/bin/mc mb idoml-minio/mlflow-idoml;
+      /usr/bin/mc mb idoml-minio/datasets;
       exit 0;
       "
     labels:
