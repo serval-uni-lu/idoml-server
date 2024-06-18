@@ -143,7 +143,7 @@ services:
       NEXTAUTH_URL: http://dashboard.${IDOML_DOMAIN}
       AUTH_PROVIDER: "oidc"
       AUTH_OIDC_URI: "http://keycloak.${IDOML_DOMAIN}/realms/idoml"
-      AUTH_OIDC_CLIENT_SECRET: "client-secret-homarr"
+      AUTH_OIDC_CLIENT_SECRET: ${IDOML_KEYCLOAK_CLIENT_SECRET_HOMARR}
       AUTH_OIDC_CLIENT_ID: "homarr"
       AUTH_OIDC_CLIENT_NAME: "IDOML"
       AUTH_OIDC_ADMIN_GROUP: "admin"
