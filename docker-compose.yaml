@@ -461,8 +461,10 @@ services:
       - "mlflow"
       - "server"
       - "--backend-store-uri=postgresql://${DB_USER:-mlflow}:${DB_PASSWORD:-mlflow}@${DB_SERVER:-mlflow-db}:${DB_PORT:-5432}/${DB_NAME:-mlflow}"
-      - "--default-artifact-root=s3://mlflow-idoml"
+      # - "--default-artifact-root=s3://mlflow-idoml"
+      - "--artifacts-destination=s3://mlflow-idoml"
       - "-h 0.0.0.0"
+      - "--serve-artifacts"
     environment:
       - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
       # - BACKEND=postgresql://${DB_USER:-mlflow}:${DB_PASSWORD:-mlflow}@${DB_SERVER:-db}:${DB_PORT:-5432}/${DB_NAME:-mlflow}
