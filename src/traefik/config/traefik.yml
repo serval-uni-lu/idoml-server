@@ -6,7 +6,7 @@ api:
 
 providers:
   docker:
-    exposedByDefault: true
+    exposedByDefault: false
     network: traefiknet
 
 entryPoints:

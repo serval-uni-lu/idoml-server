@@ -40,7 +40,7 @@
 #
 # Feel free to modify this file to suit your needs.
 ---
-version: '3.8'
+# version: '3.8'
 x-airflow-common:
   &airflow-common
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
@@ -86,37 +86,48 @@ x-airflow-common:
     - .env.idoml
 
 networks:
+  traefik-net:
+    external: true
   traefiknet:
     name: traefiknet
 
 services:
-  traefik:
-    image: "traefik:v2.11"
+  idoml-proxy:
+    image: traefik:v3
+    container_name: idoml-proxy
     restart: always
-    ports:
-      - "80:80"
-      - "8080:8080"
-    networks:
-      - traefiknet
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - "/var/run/docker.sock:/var/run/docker.sock:ro" # Permet à Traefik d'accéder aux services Docker
       - ./src/traefik/config:/etc/traefik/:ro
+    networks:
+      - traefik-net
+      - traefiknet
 
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.5
-    ports:
-      - "8180:8080"
+    # ports:
+    #   - "8180:8080"
     env_file:
       - .env.idoml
     volumes:
       - ./src/keycloak:/opt/keycloak/data/import
       - keycloak_data:/opt/keycloak/
     command:
-      - start-dev --import-realm
+      - start --import-realm
     environment:
       KC_HEALTH_ENABLED: true
+      KC_PROXY: edge
+      KC_PROXY_PROTOCOL_ENABLED: true
+      # KC_PROXY_HEADERS: forwarded
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: true
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME: keycloak.${IDOML_DOMAIN}
+      KC_HOSTNAME_ADMIN_URL: https://keycloak.${IDOML_DOMAIN}/
+      KC_HOSTNAME_DEBUG: true
     healthcheck:
-      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3"]
+      # test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3"]
+      test: [ "CMD-SHELL", "if (echo > /dev/tcp/127.0.0.1/8080) &> /dev/null; then echo \"Connection successful\"; fi" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -137,19 +148,19 @@ services:
       - ./src/homarr/configs:/app/data/configs
       - ./src/homarr/icons:/app/public/icons
       - homarr-data:/data
-    ports:
-      - '7575:7575'
+    # ports:
+    #   - '7575:7575'
     environment:
-      NEXTAUTH_URL: http://dashboard.${IDOML_DOMAIN}
+      NEXTAUTH_URL: https://dashboard.${IDOML_DOMAIN}
       AUTH_PROVIDER: "oidc"
-      AUTH_OIDC_URI: "http://keycloak.${IDOML_DOMAIN}/realms/idoml"
+      AUTH_OIDC_URI: "http://keycloak:8080/realms/idoml"
       AUTH_OIDC_CLIENT_SECRET: ${IDOML_KEYCLOAK_CLIENT_SECRET_HOMARR}
       AUTH_OIDC_CLIENT_ID: "homarr"
       AUTH_OIDC_CLIENT_NAME: "IDOML"
       AUTH_OIDC_ADMIN_GROUP: "admin"
       AUTH_OIDC_OWNER_GROUP: "admin"
       IDOML_DOMAIN: ${IDOML_DOMAIN}
-      AUTH_LOGOUT_REDIRECT_URL: "http://keycloak.${IDOML_DOMAIN}/realms/idoml/protocol/openid-connect/logout?client_id=homarr&post_logout_redirect_uri=http://dashboard.${IDOML_DOMAIN}"
+      AUTH_LOGOUT_REDIRECT_URL: "https://keycloak.${IDOML_DOMAIN}/realms/idoml/protocol/openid-connect/logout?client_id=homarr&post_logout_redirect_uri=https://dashboard.${IDOML_DOMAIN}"
     networks:
       - traefiknet
     labels:
@@ -210,8 +221,8 @@ services:
   airflow-webserver:
     <<: *airflow-common
     command: webserver
-    ports:
-      - 8280:8080
+    # ports:
+    #   - 8280:8080
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 10s
@@ -370,8 +381,8 @@ services:
   flower:
     <<: *airflow-common
     command: celery flower
-    ports:
-      - 5555:5555
+    # ports:
+    #   - 5555:5555
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:5555/"]
       interval: 10s
@@ -393,10 +404,10 @@ services:
       - "traefik.http.services.service_flower.loadbalancer.server.port=5555"
 
   minio:
-    image: minio/minio:RELEASE.2024-02-17T01-15-57Z
-    ports:
-      - "9000:9000"
-      - "9001:9001"
+    image: minio/minio:RELEASE.2025-02-07T23-21-09Z
+    # ports:
+    #   - "9000:9000"
+    #   - "9001:9001"
     env_file:
       - .env.idoml
     volumes:
@@ -470,16 +481,14 @@ services:
       # - BACKEND=postgresql://${DB_USER:-mlflow}:${DB_PASSWORD:-mlflow}@${DB_SERVER:-db}:${DB_PORT:-5432}/${DB_NAME:-mlflow}
       - AWS_ACCESS_KEY_ID=${IDOML_MINIO_ROOT_USER}
       - AWS_SECRET_ACCESS_KEY=${IDOML_MINIO_ROOT_PASSWORD}
-    ports:
+    expose:
       - 5000
     networks:
       - traefiknet
-      - default
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mlflow-idoml-endpoint.entrypoints=web"
       - "traefik.http.routers.mlflow-idoml-endpoint.rule=Host(`idoml.mlflow.${IDOML_DOMAIN}`)"
-      - "traefik.http.routers.mlflow-idoml.entrypoints=web"
     restart: always
     depends_on:
       - mc
@@ -497,6 +506,8 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD:-mlflow}
     volumes:
       - mlflow-db-volume:/var/lib/postgresql/data
+    networks:
+      - traefiknet
 
 volumes:
   postgres-db-volume:

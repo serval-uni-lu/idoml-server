@@ -72,6 +72,7 @@ PROVIDER_NAME = 'keycloak'
 CLIENT_ID = 'airflow'
 CLIENT_SECRET = os.environ.get('KEYCLOAK_CLIENT_SECRET_AIRFLOW', '')
 KEYCLOAK_URL = os.environ.get('_KEYCLOAK_URL', '')
+KEYCLOAK_URL_PUBLIC = f'http://keycloak.{IDOML_DOMAIN}'
 OIDC_ISSUER = f'{KEYCLOAK_URL}/realms/idoml'
 OIDC_BASE_URL = "{oidc_issuer}/protocol/openid-connect".format(oidc_issuer=OIDC_ISSUER)
 OIDC_TOKEN_URL = "{oidc_base_url}/token".format(oidc_base_url=OIDC_BASE_URL)
@@ -84,7 +85,7 @@ OAUTH_PROVIDERS = [{
     'remote_app': {
         'api_base_url':OIDC_BASE_URL,
         'access_token_url':OIDC_TOKEN_URL,
-        'authorize_url':OIDC_AUTH_URL,
+        'authorize_url':f"{KEYCLOAK_URL_PUBLIC}/realms/idoml/protocol/openid-connect/auth",
         'request_token_url': None,
         'client_id': CLIENT_ID,
         'client_secret': CLIENT_SECRET,
@@ -105,7 +106,7 @@ class CustomAuthRemoteUserView(AuthOAuthView):
         """Delete access token before logging out."""
         super().logout()
         return redirect("{oidc_base_url}/logout?post_logout_redirect_uri={airflow_url}&client_id={client_id}".format(
-                    oidc_base_url=OIDC_BASE_URL, 
+                    oidc_base_url=f"{KEYCLOAK_URL_PUBLIC}/realms/idoml/protocol/openid-connect", 
                     airflow_url=AIRFLOW_URL,
                     client_id=CLIENT_ID,
                     )
