@@ -71,7 +71,7 @@ x-airflow-common:
     - /var/run/docker.sock:/var/run/docker.sock
   user: "${AIRFLOW_UID:-50000}:0"
   networks:
-    - traefiknet
+    - idoml-proxy-net
   group_add:
     - docker
   depends_on:
@@ -88,8 +88,7 @@ x-airflow-common:
 networks:
   traefik-net:
     external: true
-  traefiknet:
-    name: traefiknet
+  idoml-proxy-net:
 
 services:
   idoml-proxy:
@@ -101,7 +100,7 @@ services:
       - ./src/traefik/config:/etc/traefik/:ro
     networks:
       - traefik-net
-      - traefiknet
+      - idoml-proxy-net
 
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.5
@@ -134,7 +133,7 @@ services:
       start_period: 30s
     restart: always
     networks:
-      - traefiknet
+      - idoml-proxy-net
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.idoml-keycloak.entrypoints=web"
@@ -162,7 +161,7 @@ services:
       IDOML_DOMAIN: ${IDOML_DOMAIN}
       AUTH_LOGOUT_REDIRECT_URL: "https://keycloak.${IDOML_DOMAIN}/realms/idoml/protocol/openid-connect/logout?client_id=homarr&post_logout_redirect_uri=https://dashboard.${IDOML_DOMAIN}"
     networks:
-      - traefiknet
+      - idoml-proxy-net
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.idoml-homarr.entrypoints=web"
@@ -185,7 +184,7 @@ services:
     env_file:
       - .env.idoml 
     networks:
-      - traefiknet
+      - idoml-proxy-net
 
   redis:
     image: redis:latest
@@ -198,7 +197,7 @@ services:
       retries: 50
     restart: always
     networks:
-      - traefiknet
+      - idoml-proxy-net
 
   git-sync:
     image: registry.k8s.io/git-sync/git-sync:v3.6.3
@@ -394,7 +393,7 @@ services:
       airflow-init:
         condition: service_completed_successfully
     networks:
-      - traefiknet
+      - idoml-proxy-net
     labels:
       - "traefik.enable=true"
       # Console
@@ -431,7 +430,7 @@ services:
       timeout: 10s
       retries: 5
     networks:
-      - traefiknet
+      - idoml-proxy-net
     labels:
       - "traefik.enable=true"
       # Console
@@ -450,7 +449,7 @@ services:
     env_file:
       - .env.idoml
     networks:
-      - traefiknet
+      - idoml-proxy-net
     depends_on:
       minio: 
         condition: service_healthy
@@ -484,7 +483,7 @@ services:
     expose:
       - 5000
     networks:
-      - traefiknet
+      - idoml-proxy-net
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mlflow-idoml-endpoint.entrypoints=web"
@@ -507,7 +506,7 @@ services:
     volumes:
       - mlflow-db-volume:/var/lib/postgresql/data
     networks:
-      - traefiknet
+      - idoml-proxy-net
 
 volumes:
   postgres-db-volume:
